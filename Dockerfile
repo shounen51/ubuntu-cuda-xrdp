@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 as builder
+FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu18.04 as builder
 MAINTAINER Daniel Guerra
 
 # Install packages
@@ -19,7 +19,7 @@ WORKDIR /tmp
 RUN apt-get source pulseaudio
 RUN apt-get build-dep -yy pulseaudio
 WORKDIR /tmp/pulseaudio-11.1
-RUN dpkg-buildpackage -rfakeroot -uc -b
+RUN dpkg-buildpackage -uc -b
 WORKDIR /tmp
 RUN git clone --branch v0.9.7 --recursive https://github.com/neutrinolabs/xrdp.git
 WORKDIR /tmp/xrdp
@@ -33,7 +33,7 @@ RUN make
 RUN mkdir -p /tmp/so
 RUN cp *.so /tmp/so
 
-FROM ubuntu:18.04
+FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu18.04
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt update && apt -y full-upgrade && apt install -y \
   ca-certificates \
