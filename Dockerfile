@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM nvidia/cuda:9.0-base-ubuntu16.04
 MAINTAINER Daniel Guerra
 
 # Install packages
@@ -25,7 +25,7 @@ WORKDIR /tmp
 RUN apt-get source pulseaudio
 RUN apt-get build-dep -yy pulseaudio
 WORKDIR /tmp/pulseaudio-8.0
-RUN dpkg-buildpackage -rfakeroot -uc -b
+RUN dpkg-buildpackage -uc -b
 WORKDIR /tmp
 RUN git clone --branch v0.9.4 --recursive https://github.com/neutrinolabs/xrdp.git
 WORKDIR /tmp/xrdp
