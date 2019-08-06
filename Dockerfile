@@ -75,10 +75,14 @@ RUN rm -rf /etc/xrdp/rsakeys.ini /etc/xrdp/*.pem
 
 # Add sample user
 
-RUN addgroup ubuntu
-RUN useradd -m -s /bin/bash -g ubuntu ubuntu
-RUN echo "ubuntu:ubuntu" | /usr/sbin/chpasswd
-RUN echo "ubuntu    ALL=(ALL) ALL" >> /etc/sudoers
+RUN addgroup nadi
+RUN useradd -m -s /bin/bash -g nadi nadi
+RUN echo "nadi:nadi" | /usr/sbin/chpasswd
+RUN echo "nadi    ALL=(ALL) ALL" >> /etc/sudoers
+
+RUN mkdir /workspaces && touch /workspaces/test.txt
+RUN chown nadi:nadi /workspaces
+VOLUME ["/workspaces", "/home/nadi/Documents/MOT"]
 
 # Docker config
 
