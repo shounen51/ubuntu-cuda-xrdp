@@ -82,7 +82,6 @@ RUN echo "nadi    ALL=(ALL) ALL" >> /etc/sudoers
 
 RUN mkdir /workspaces && touch /workspaces/test.txt
 RUN chown nadi:nadi /workspaces
-VOLUME ["/workspaces", "/home/nadi/Documents/MOT"]
 
 # Docker config
 
