@@ -18,7 +18,7 @@ Start the rdp server
 (WARNING: use the --shm-size 1g or firefox/chrome will crash)
 
 ```bash
-docker run -d --name uxrdp --hostname terminalserver --shm-size 1g -p 3389:3389 -p 2222:22 danielguerra/ubuntu-xrdp
+docker run --gpus all -dit --runtime nvidia -e NVIDIA_DRIVER_CAPABILITIES=compute,utility,video --name cudaxrdptest --hostname hostname --shm-size 1g -p 20389:3389 -p 20222:22 {imagename:tag}
 ```
 *note if you already use a rdp server on 3389 change -p <my-port>:3389
 	  -p 2222:22 is for ssh access ( ssh -p 2222 ubuntu@<docker-ip> )
