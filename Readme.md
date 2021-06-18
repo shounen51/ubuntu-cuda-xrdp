@@ -18,7 +18,9 @@ Start the rdp server
 (WARNING: use the --shm-size 1g or firefox/chrome will crash)
 
 ```bash
-docker run --gpus all -dit --runtime nvidia -e NVIDIA_DRIVER_CAPABILITIES=compute,utility,video --name cudaxrdptest --hostname hostname --shm-size 1g -p 20389:3389 -p 20222:22 {imagename:tag}
+docker build -t xrdpcuda .
+
+docker run --gpus all -dit --runtime nvidia -e NVIDIA_DRIVER_CAPABILITIES=compute,utility,video -v ~/rdp_nvidia_docker_10.0/mnt/:/home/ubuntu/mnt/ --name cudaxrdptest --hostname hostname --shm-size 1g -p 14389:3389 -p 14322:22 xrdpcuda:latest
 ```
 *note if you already use a rdp server on 3389 change -p <my-port>:3389
 	  -p 2222:22 is for ssh access ( ssh -p 2222 ubuntu@<docker-ip> )
