@@ -33,7 +33,7 @@ RUN make
 RUN mkdir -p /tmp/so
 RUN cp *.so /tmp/so
 
-FROM ubuntu:18.04
+FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04 
 ARG ADDITIONAL_PACKAGES=""
 ENV ADDITIONAL_PACKAGES=${ADDITIONAL_PACKAGES}
 
@@ -61,6 +61,7 @@ RUN apt update && apt -y full-upgrade && apt install -y \
   xfce4-taskmanager \
   xfce4-terminal \
   xfce4-xkb-plugin \
+  # xorg-video-abi-23 \
   xorgxrdp \
   xprintidle \
   xrdp \
@@ -91,3 +92,20 @@ VOLUME ["/etc/ssh","/home"]
 EXPOSE 3389 22 9001
 ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
 CMD ["supervisord"]
+
+# font
+RUN apt update && apt-get install fonts-droid-fallback ttf-wqy-zenhei ttf-wqy-microhei fonts-arphic-ukai fonts-arphic-uming -y
+
+# cudnn
+RUN apt-get update && apt-get install wget -y 
+RUN wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/libcudnn7_7.6.5.32-1+cuda10.2_amd64.deb
+RUN dpkg -i ./libcudnn7_7.6.5.32-1+cuda10.2_amd64.deb
+RUN wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/libcudnn7-dev_7.6.5.32-1+cuda10.2_amd64.deb
+RUN dpkg -i ./libcudnn7-dev_7.6.5.32-1+cuda10.2_amd64.deb
+
+# torch
+RUN apt update && apt install curl wget git htop neofetch python3-pip libjpeg-dev cmake cmake-qt-gui p7zip-full gcc g++ ninja-build fonts-noto-cjk-extra -y \
+    && pip3 install pipenv \
+    && pip3 install opencv-python \
+    && apt install libgl1-mesa-glx -y \
+    && pip3 install torch torchvision torchaudio
