@@ -1,16 +1,16 @@
-## Ubuntu 18.04/16.04  Multi User Remote Desktop Server
+## Ubuntu 20.04/18.04/16.04  Multi User Remote Desktop Server
 
 Fully implemented Multi User xrdp
 with xorgxrdp and pulseaudio
-on Ubuntu 16.04/18.04.
+on Ubuntu 20.04/18.04
 Copy/Paste and sound is working.
 Users can re-login in the same session.
 Xfce4, Firefox are pre installed.
 
 # Tags
 
-danielguerra/ubuntu-xrdp:16.04
 danielguerra/ubuntu-xrdp:18.04  or latest
+danielguerra/ubuntu-xrdp:20.04
 
 ## Usage
 
@@ -18,9 +18,7 @@ Start the rdp server
 (WARNING: use the --shm-size 1g or firefox/chrome will crash)
 
 ```bash
-docker build -t xrdpcuda_10.2 .
-
-docker run --gpus all -dit --runtime nvidia -e NVIDIA_DRIVER_CAPABILITIES=compute,utility,video -v /host_dir:/container_dir --name xrdp_cuda10.2 --hostname hostname --shm-size 1g -p 14389:3389 -p 14322:22 xrdpcuda_10.2:latest
+docker run -d --name uxrdp --hostname terminalserver --shm-size 1g -p 3389:3389 -p 2222:22 danielguerra/ubuntu-xrdp:20.04
 ```
 *note if you already use a rdp server on 3389 change -p <my-port>:3389
 	  -p 2222:22 is for ssh access ( ssh -p 2222 ubuntu@<docker-ip> )
@@ -28,26 +26,30 @@ docker run --gpus all -dit --runtime nvidia -e NVIDIA_DRIVER_CAPABILITIES=comput
 Connect with your remote desktop client to the docker server.
 Use the Xorg session (leave as it is), user and pass.
 
-## Sample user
+## Creation of users
 
-There is a sample user with sudo rights
+To automate the creation of users, supply a file users.list in the /etc directory of the container.
+The format is as follows:
+
+```bash
+id username password-hash list-of-supplemental-groups
+```
+
+The provided users.list file will create a sample user with sudo rights
 
 Username: ubuntu
 Password: ubuntu
 
-
-You can set a PASSWORDHASH
-
-First create a password hash
+To generate the password hash use the following line
 
 ```bash
 openssl passwd -1 'newpassword'
 ```
 
-Run the xrdp container with your hash
+Run the xrdp container with your file
 
 ```bash
-docker run -d -e PASSWORDHASH='$1$Cm8EQjXg$7dJeRsw6TLvgxsl3.pBRZ1'
+docker run -d -v $PWD/users.list:/etc/users.list
 ```
 
 You can change your password in the rdp session in a terminal
