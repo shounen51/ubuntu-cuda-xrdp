@@ -67,6 +67,8 @@ RUN apt -y full-upgrade && apt-get install -y \
   xfce4-cpugraph-plugin \
   xfce4-netload-plugin \
   xfce4-screenshooter \
+  xfce4-screensaver \
+  xfce4-power-manager \
   xfce4-taskmanager \
   xfce4-terminal \
   xfce4-xkb-plugin \
